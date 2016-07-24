@@ -1,0 +1,34 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "io.davidbjerremose.pokesniffer"
+        },
+        "cordova-plugin-mauron85-background-geolocation": {
+            "PACKAGE_NAME": "io.davidbjerremose.pokesniffer"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "io.davidbjerremose.pokesniffer"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "io.davidbjerremose.pokesniffer"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "io.davidbjerremose.pokesniffer"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "io.davidbjerremose.pokesniffer"
+        },
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "io.davidbjerremose.pokesniffer"
+        }
+    }
+}

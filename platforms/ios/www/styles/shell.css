@@ -1,0 +1,53 @@
+html, body {
+  margin: 0;
+  padding: 2vw;
+  background-color: #eee; }
+
+header {
+  min-height: 25vw; }
+
+section + section:before {
+  height: 1px;
+  width: 100%;
+  display: block;
+  margin: 5vw 0;
+  content: ' ';
+  background-color: #000;
+  opacity: 0.1; }
+
+h1, h4, p {
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica'; }
+
+h1 {
+  font-family: 'Helvetica';
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10vw; }
+
+ul {
+  margin: 0;
+  padding: 0; }
+
+li {
+  list-style: none;
+  padding: 2vw;
+  background-color: #FFF;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); }
+  li:after {
+    clear: both;
+    display: table;
+    content: ' '; }
+
+img {
+  max-width: 9vw;
+  float: left; }
+
+.details {
+  margin-left: 2vw;
+  float: left;
+  vertical-align: middle; }
+
+#app {
+  background-color: black; }
