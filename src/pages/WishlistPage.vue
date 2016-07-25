@@ -11,7 +11,7 @@
     </section>
     <section class="pokemons">
       <pokemon-grid :pokemons="pokemons" :filter="filter" :filter-prop="filterProp">
-        <pokemon v-bind:class="{'tracking': isTrackingPokemon(pokemon)}" v-for="pokemon in pokemons" v-on:click="toggleTracking(pokemon)" :data="pokemon"></pokemon>
+        <pokemon v-bind:class="{'tracking': isTrackingPokemon(pokemon)}" v-for="pokemon in pokemons | filterBy filter in filterProp" v-on:click="toggleTracking(pokemon)" :data="pokemon"></pokemon>
       </pokemon-grid>
     </section>
   </div>
@@ -81,31 +81,6 @@ export default {
 </script>
 
 <style lang="scss">
-
-
-.info {
-  h3 {
-    font-family: 'Helvetica';
-    font-weight: bold;
-    text-align: center;
-    color: #FFF;
-  }
-
-  p {
-    color: #FFF;
-    text-align: center;
-    font-size: 3vw;
-  }
-
-  input {
-    border: none;
-    border-radius: 3vw;
-    padding: 3vw;
-    width: 100%;
-    box-sizing: border-box;
-    margin-top: 5vw;
-  }
-}
 
 .pokemon {
   overflow: hidden;

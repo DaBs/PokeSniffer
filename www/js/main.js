@@ -27261,6 +27261,10 @@ var _MenuActions = require('./actions/MenuActions');
 
 var MenuActions = _interopRequireWildcard(_MenuActions);
 
+var _NotificationsActions = require('./actions/NotificationsActions');
+
+var NotificationsActions = _interopRequireWildcard(_NotificationsActions);
+
 var _vueRedux = require('vue-redux');
 
 var _vueRedux2 = _interopRequireDefault(_vueRedux);
@@ -27283,7 +27287,7 @@ var middleware = storage.createMiddleware(engine);
 var createStoreWithMiddleware = (0, _redux.applyMiddleware)(middleware, logger)(_redux.createStore);
 var store = createStoreWithMiddleware(_index2.default);
 
-var allMixins = (0, _vueRedux2.default)(Object.assign({}, PokemonActions, MenuActions));
+var allMixins = (0, _vueRedux2.default)(Object.assign({}, PokemonActions, MenuActions, NotificationsActions));
 
 var load = storage.createLoader(engine);
 load(store);
@@ -27317,7 +27321,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-427037e8", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./actions/MenuActions":61,"./actions/PokemonActions":62,"./components/Menu.vue":63,"./components/PokemonList.vue":66,"./reducers/index":72,"redux":43,"redux-logger":28,"redux-storage":36,"redux-storage-engine-localstorage":29,"vue":57,"vue-hot-reload-api":53,"vue-redux":54,"vueify/lib/insert-css":58}],61:[function(require,module,exports){
+},{"./actions/MenuActions":61,"./actions/NotificationsActions":62,"./actions/PokemonActions":63,"./components/Menu.vue":64,"./components/PokemonList.vue":67,"./reducers/index":74,"redux":43,"redux-logger":28,"redux-storage":36,"redux-storage-engine-localstorage":29,"vue":57,"vue-hot-reload-api":53,"vue-redux":54,"vueify/lib/insert-css":58}],61:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27338,6 +27342,20 @@ function hideMenu() {
 }
 
 },{}],62:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.addDeliveredNotification = addDeliveredNotification;
+function addDeliveredNotification(data) {
+  return {
+    type: 'add-delivered-notification',
+    data: data
+  };
+}
+
+},{}],63:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27381,7 +27399,7 @@ function updateAllPokemons(data) {
   };
 }
 
-},{}],63:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\nnav {\n  position: fixed;\n  top: 0;\n  left: 0;\n  background-color: #FFF;\n  width: 80vw;\n  height: 100%;\n  transform: translateX(-85vw);\n  transition: all 0.4s ease;\n  overflow: visible;\n  z-index: 99;\n  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); }\n  /* line 16, stdin */\n  nav.is-open {\n    transform: none; }\n    /* line 18, stdin */\n    nav.is-open .toggle {\n      bottom: 50vh;\n      right: 67.5vw; }\n  /* line 24, stdin */\n  nav .toggle {\n    position: absolute;\n    width: 14vw;\n    height: 14vw;\n    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#a2db95+0,24ccaa+100 */\n    background: #a2db95;\n    /* Old browsers */\n    /* FF3.6-15 */\n    /* Chrome10-25,Safari5.1-6 */\n    background: linear-gradient(to right, #a2db95 0%, #24ccaa 100%);\n    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */\n    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a2db95', endColorstr='#24ccaa',GradientType=1 );\n    /* IE6-9 */\n    color: #FFF;\n    border-radius: 50%;\n    text-align: center;\n    padding: 3.5vw 0;\n    box-sizing: border-box;\n    bottom: 10vw;\n    right: 25vw;\n    font-size: 7vw;\n    transform: translateX(85vw);\n    transform-origin: center;\n    transition: all 0.4s ease;\n    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); }\n    /* line 46, stdin */\n    nav .toggle i {\n      margin-right: 0; }\n  /* line 51, stdin */\n  nav a {\n    width: 100%;\n    color: #000;\n    text-decoration: none;\n    font-size: 5vw;\n    font-weight: normal;\n    font-family: 'Helvetica';\n    padding: 6vw 8vw;\n    display: block;\n    border-bottom: 1px solid #eee;\n    box-sizing: border-box; }\n    /* line 62, stdin */\n    nav a i {\n      margin-right: 2vw; }\n")
 'use strict';
@@ -27405,7 +27423,7 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n\n<nav v-bind:class=\"{'is-open': toggled}\">\n  <a class=\"toggle\" v-on:click=\"toggleMenu\"><i class=\"fa\" v-bind:class=\"{'fa-bars': !toggled, 'fa-times': toggled}\"></i></a>\n  <a v-link=\"{name: 'scanner'}\"><i class=\"fa fa-globe\"></i>Scanner</a>\n  <a v-link=\"{name: 'wishlist'}\"><i class=\"fa fa-list\"></i>Wishlist</a>\n  <a v-link=\"{name: 'settings'}\"><i class=\"fa fa-cogs\"></i>Settings</a>\n</nav>\n\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n\n<nav v-bind:class=\"{'is-open': toggled}\">\n  <a class=\"toggle\" v-on:click=\"toggleMenu\"><i class=\"fa\" v-bind:class=\"{'fa-bars': !toggled, 'fa-times': toggled}\"></i></a>\n  <a v-link=\"{name: 'scanner'}\"><i class=\"fa fa-globe\"></i>Scanner</a>\n  <a v-link=\"{name: 'map'}\"><i class=\"fa fa-map\"></i>Map</a>\n  <a v-link=\"{name: 'wishlist'}\"><i class=\"fa fa-list\"></i>Wishlist</a>\n  <a v-link=\"{name: 'settings'}\"><i class=\"fa fa-cogs\"></i>Settings</a>\n</nav>\n\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -27420,7 +27438,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-d1aabbe0", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],64:[function(require,module,exports){
+},{"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],65:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.pokemon {\n  list-style: none;\n  padding: 5vw;\n  margin-bottom: 3vw;\n  background-color: #FFF;\n  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);\n  overflow: hidden;\n  position: relative; }\n  /* line 11, stdin */\n  .pokemon:after {\n    clear: both;\n    display: table;\n    content: ' '; }\n  /* line 16, stdin */\n  .pokemon__img {\n    width: 8vw;\n    height: 8vw;\n    display: table-cell;\n    background-size: 12vw;\n    background-position: center;\n    background-repeat: no-repeat;\n    vertical-align: middle; }\n  /* line 25, stdin */\n  .pokemon__bg {\n    position: absolute;\n    width: 100vw;\n    height: 100vw;\n    background-size: 100vw;\n    background-position: center;\n    z-index: 0;\n    top: 50%;\n    left: 50%;\n    margin: -50vw 0 0 -50vw;\n    opacity: 0.2;\n    -webkit-filter: blur(3px);\n            filter: blur(3px); }\n  /* line 38, stdin */\n  .pokemon__details {\n    display: table-cell;\n    padding-left: 2vw;\n    vertical-align: middle;\n    width: calc(100% - 10vw);\n    box-sizing: border-box;\n    position: relative;\n    z-index: 1; }\n")
 'use strict';
@@ -27477,7 +27495,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-712a99b2", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../utils/location.js":75,"moment":19,"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],65:[function(require,module,exports){
+},{"../utils/location.js":78,"moment":19,"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],66:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.grid {\n  background-color: #FFF;\n  padding: 3vw;\n  margin: 0; }\n  /* line 6, stdin */\n  .grid .pokemon {\n    width: 16vw;\n    height: 16vw;\n    box-sizing: border-box;\n    padding: 0;\n    display: inline-block;\n    margin: 0 0.6vw; }\n    /* line 13, stdin */\n    .grid .pokemon__img {\n      width: 16vw;\n      height: 16vw;\n      background-size: 16vw; }\n")
 'use strict';
@@ -27522,7 +27540,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7ef55918", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./Pokemon.vue":64,"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],66:[function(require,module,exports){
+},{"./Pokemon.vue":65,"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],67:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27558,7 +27576,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-8795db20", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"./Pokemon.vue":64,"vue":57,"vue-hot-reload-api":53}],67:[function(require,module,exports){
+},{"./Pokemon.vue":65,"vue":57,"vue-hot-reload-api":53}],68:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27604,7 +27622,7 @@ var CordovaApp = function () {
       var locationString = JSON.stringify(newLoc);
       console.log(locationString);
       window.localStorage.setItem("lastKnownLocation", locationString);
-      this.backgroundScan("data");
+      backgroundScan("data");
     }
   }, {
     key: 'onGeolocationFail',
@@ -27614,11 +27632,13 @@ var CordovaApp = function () {
   }, {
     key: 'onPause',
     value: function onPause() {
+      console.log('paused app');
       window.backgroundGeolocation.start();
     }
   }, {
     key: 'onResume',
     value: function onResume() {
+      console.log('resumed app');
       window.backgroundGeolocation.stop();
       console.log(window.localStorage.getItem("lastKnownLocation"));
     }
@@ -27648,11 +27668,11 @@ var CordovaApp = function () {
       return new Promise(function (resolve, reject) {
         var location = JSON.parse(window.localStorage.getItem("lastKnownLocation"));
         _superagent2.default.get(_this.config.visionQueryUrl + "/" + type + "/" + location.latitude + "/" + location.longitude).end(function (err, res) {
-          console.log(err, res);
+          //console.log(err, res);
           if (err || !res.body.pokemon) return reject(err);
-          console.log(res);
+          //console.log(res);
           var tempPokemons = res.body.pokemon.map(function (pokemon) {
-            console.log(pokemon);
+            //console.log(pokemon);
             pokemon.identifier = _this.pokedata[pokemon.pokemonId].identifier;
             pokemon.position = { "latitude": pokemon.latitude, "longitude": pokemon.longitude };
             pokemon.distance = Math.ceil(_this.calculateDistance(location, { "latitude": pokemon.latitude, "longitude": pokemon.longitude }) * 1000);
@@ -27677,12 +27697,9 @@ var CordovaApp = function () {
       }
     }
   }], [{
-    key: 'sendNotification',
-    value: function sendNotification(data) {
-      cordova.plugins.notification.local.schedule({
-        id: data.id,
-        text: data.text
-      });
+    key: 'sendNotifications',
+    value: function sendNotifications(data) {
+      cordova.plugins.notification.local.schedule(data);
     }
   }]);
 
@@ -27691,7 +27708,7 @@ var CordovaApp = function () {
 
 exports.default = CordovaApp;
 
-},{"./actions/PokemonActions":62,"./utils/location.js":75,"superagent":45,"zepto-browserify":59}],68:[function(require,module,exports){
+},{"./actions/PokemonActions":63,"./utils/location.js":78,"superagent":45,"zepto-browserify":59}],69:[function(require,module,exports){
 'use strict';
 
 var _vue = require('vue');
@@ -27734,6 +27751,10 @@ var _SettingsPage = require('./pages/SettingsPage.vue');
 
 var _SettingsPage2 = _interopRequireDefault(_SettingsPage);
 
+var _MapPage = require('./pages/MapPage.vue');
+
+var _MapPage2 = _interopRequireDefault(_MapPage);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _vue2.default.use(_vueAnimatedList2.default);
@@ -27761,6 +27782,10 @@ router.map({
     name: 'settings',
     component: _SettingsPage2.default
   },
+  '/map': {
+    name: 'map',
+    component: _MapPage2.default
+  },
   '*': {
     component: _ScanPage2.default
   }
@@ -27779,7 +27804,7 @@ var cordovaConfig = {
 
 var updatePokemons = function updatePokemons(pokemons) {
 
-  console.log(pokemons);
+  //console.log(pokemons);
   if (pokemons) {
     router.app.actions.updateAllPokemons(pokemons);
   }
@@ -27796,9 +27821,9 @@ curApp.init(function () {
   setInterval(function () {
     window.navigator.geolocation.getCurrentPosition(curApp.onGeolocationSuccess, curApp.onGeolocationFail, { maximumAge: 0, timeout: 5000, enableHighAccuracy: true });
   }, 10000);
-  curApp.backgroundScan("data").then(function (pokemons) {
+  /*curApp.backgroundScan("data").then(pokemons => {
     updatePokemons(pokemons);
-  });
+  });*/
   setInterval(function () {
     curApp.backgroundScan("data").then(function (pokemons) {
       updatePokemons(pokemons);
@@ -27817,7 +27842,76 @@ curApp.init(function () {
     stopOnTerminate: false });
 });
 
-},{"./App.vue":60,"./cordova.js":67,"./pages/ScanPage.vue":69,"./pages/SettingsPage.vue":70,"./pages/WishlistPage.vue":71,"./utils/location.js":75,"superagent":45,"vue":57,"vue-animated-list":52,"vue-router":56}],69:[function(require,module,exports){
+},{"./App.vue":60,"./cordova.js":68,"./pages/MapPage.vue":70,"./pages/ScanPage.vue":71,"./pages/SettingsPage.vue":72,"./pages/WishlistPage.vue":73,"./utils/location.js":78,"superagent":45,"vue":57,"vue-animated-list":52,"vue-router":56}],70:[function(require,module,exports){
+var __vueify_insert__ = require("vueify/lib/insert-css")
+var __vueify_style__ = __vueify_insert__.insert("\n\n#map {\n  height: 100vh;\n  width: 100vw;\n  display: block;\n  position: absolute;\n  z-index: 80;\n  top: 0;\n  left: 0;\n}\n\n")
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _superagent = require('superagent');
+
+var _superagent2 = _interopRequireDefault(_superagent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var iconBase = './images/pokemons/';
+
+exports.default = {
+  name: 'MapPage',
+
+  data: function data() {
+    return {
+      center: { lat: 10.0, lng: 10.0 },
+      zoom: 15,
+      style: null,
+      pokemons: this.$parent.state.pokemon.pokemons
+    };
+  },
+
+
+  watch: {
+    'pokemons': function pokemons(val, oldVal) {
+      console.log(val, oldVal);
+    }
+  },
+
+  components: {},
+
+  ready: function ready() {
+    var pos = JSON.parse(window.localStorage.getItem("lastKnownLocation"));
+    _superagent2.default.get('./data/maptheme.json').end(function (err, res) {
+      if (err) console.log(err);
+      var mapDiv = document.getElementById('map');
+      var map = new google.maps.Map(mapDiv, {
+        center: { lat: pos.latitude, lng: pos.longitude },
+        zoom: 15,
+        styles: res.body,
+        disableDefaultUI: true
+
+      });
+    });
+  }
+};
+if (module.exports.__esModule) module.exports = module.exports.default
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n<div>\n  <div id=\"map\">\n  </div>\n</div>\n\n"
+if (module.hot) {(function () {  module.hot.accept()
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), true)
+  if (!hotAPI.compatible) return
+  module.hot.dispose(function () {
+    __vueify_insert__.cache["\n\n#map {\n  height: 100vh;\n  width: 100vw;\n  display: block;\n  position: absolute;\n  z-index: 80;\n  top: 0;\n  left: 0;\n}\n\n"] = false
+    document.head.removeChild(__vueify_style__)
+  })
+  if (!module.hot.data) {
+    hotAPI.createRecord("_v-14fba71e", module.exports)
+  } else {
+    hotAPI.update("_v-14fba71e", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
+  }
+})()}
+},{"superagent":45,"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],71:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
 var __vueify_style__ = __vueify_insert__.insert("/* line 2, stdin */\n.filters {\n  margin-bottom: 5vw;\n  width: 100%;\n  text-align: center; }\n  /* line 6, stdin */\n  .filters span {\n    margin-right: 1vw;\n    color: #FFF;\n    font-weight: bold;\n    font-family: 'Helvetica'; }\n  /* line 12, stdin */\n  .filters .orderToggle {\n    margin-left: 3vw; }\n")
 'use strict';
@@ -27881,7 +27975,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-55cae2ae", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/PokemonList.vue":66,"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],70:[function(require,module,exports){
+},{"../components/PokemonList.vue":67,"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],72:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27902,9 +27996,9 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-699c43cf", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"vue":57,"vue-hot-reload-api":53}],71:[function(require,module,exports){
+},{"vue":57,"vue-hot-reload-api":53}],73:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("/* line 5, stdin */\n.info h3 {\n  font-family: 'Helvetica';\n  font-weight: bold;\n  text-align: center;\n  color: #FFF; }\n\n/* line 12, stdin */\n.info p {\n  color: #FFF;\n  text-align: center;\n  font-size: 3vw; }\n\n/* line 18, stdin */\n.info input {\n  border: none;\n  border-radius: 3vw;\n  padding: 3vw;\n  width: 100%;\n  box-sizing: border-box;\n  margin-top: 5vw; }\n\n/* line 28, stdin */\n.pokemon {\n  overflow: hidden; }\n  /* line 30, stdin */\n  .pokemon:before, .pokemon:after {\n    display: block;\n    position: absolute;\n    pointer-events: none;\n    transition: all 0.4s ease; }\n  /* line 36, stdin */\n  .pokemon:before {\n    content: ' ';\n    background-color: green;\n    opacity: 0;\n    z-index: 3;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%; }\n  /* line 46, stdin */\n  .pokemon:after {\n    content: \"\\f041\";\n    font: normal normal normal 14px/1 FontAwesome;\n    font-size: inherit;\n    text-rendering: auto;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    color: #FFF;\n    z-index: 4;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 8vw;\n    height: 8vw;\n    font-size: 8vw;\n    margin: -4vw 0 0 -4vw;\n    text-align: center;\n    transform: translateY(-20vw); }\n  /* line 66, stdin */\n  .pokemon.tracking:before {\n    opacity: 0.5; }\n  /* line 69, stdin */\n  .pokemon.tracking:after {\n    transform: translateY(0vw); }\n")
+var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n.pokemon {\n  overflow: hidden; }\n  /* line 5, stdin */\n  .pokemon:before, .pokemon:after {\n    display: block;\n    position: absolute;\n    pointer-events: none;\n    transition: all 0.4s ease; }\n  /* line 11, stdin */\n  .pokemon:before {\n    content: ' ';\n    background-color: green;\n    opacity: 0;\n    z-index: 3;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%; }\n  /* line 21, stdin */\n  .pokemon:after {\n    content: \"\\f041\";\n    font: normal normal normal 14px/1 FontAwesome;\n    font-size: inherit;\n    text-rendering: auto;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    color: #FFF;\n    z-index: 4;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 8vw;\n    height: 8vw;\n    font-size: 8vw;\n    margin: -4vw 0 0 -4vw;\n    text-align: center;\n    transform: translateY(-20vw); }\n  /* line 41, stdin */\n  .pokemon.tracking:before {\n    opacity: 0.5; }\n  /* line 44, stdin */\n  .pokemon.tracking:after {\n    transform: translateY(0vw); }\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27982,13 +28076,13 @@ exports.default = {
   }
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n<div>\n  <section class=\"info\">\n    <h3>Tap on a pokemon to add it to your wishlist</h3>\n    <p>This means you get notifications when you are within ~1km of it. Green pokemons are pokemons you are currently tracking. Tap them to untrack</p>\n    <input v-model=\"filter\" type=\"text\" placeholder=\"Search for specific pokemon\" list=\"pokemons\">\n    <datalist id=\"pokemons\">\n      <option v-for=\"pokemon in pokemons\" value=\"{{pokemon.identifier | capitalize}}\">\n    </option></datalist>\n  </section>\n  <section class=\"pokemons\">\n    <pokemon-grid :pokemons=\"pokemons\" :filter=\"filter\" :filter-prop=\"filterProp\">\n      <pokemon v-bind:class=\"{'tracking': isTrackingPokemon(pokemon)}\" v-for=\"pokemon in pokemons\" v-on:click=\"toggleTracking(pokemon)\" :data=\"pokemon\"></pokemon>\n    </pokemon-grid>\n  </section>\n</div>\n\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n<div>\n  <section class=\"info\">\n    <h3>Tap on a pokemon to add it to your wishlist</h3>\n    <p>This means you get notifications when you are within ~1km of it. Green pokemons are pokemons you are currently tracking. Tap them to untrack</p>\n    <input v-model=\"filter\" type=\"text\" placeholder=\"Search for specific pokemon\" list=\"pokemons\">\n    <datalist id=\"pokemons\">\n      <option v-for=\"pokemon in pokemons\" value=\"{{pokemon.identifier | capitalize}}\">\n    </option></datalist>\n  </section>\n  <section class=\"pokemons\">\n    <pokemon-grid :pokemons=\"pokemons\" :filter=\"filter\" :filter-prop=\"filterProp\">\n      <pokemon v-bind:class=\"{'tracking': isTrackingPokemon(pokemon)}\" v-for=\"pokemon in pokemons | filterBy filter in filterProp\" v-on:click=\"toggleTracking(pokemon)\" :data=\"pokemon\"></pokemon>\n    </pokemon-grid>\n  </section>\n</div>\n\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["/* line 5, stdin */\n.info h3 {\n  font-family: 'Helvetica';\n  font-weight: bold;\n  text-align: center;\n  color: #FFF; }\n\n/* line 12, stdin */\n.info p {\n  color: #FFF;\n  text-align: center;\n  font-size: 3vw; }\n\n/* line 18, stdin */\n.info input {\n  border: none;\n  border-radius: 3vw;\n  padding: 3vw;\n  width: 100%;\n  box-sizing: border-box;\n  margin-top: 5vw; }\n\n/* line 28, stdin */\n.pokemon {\n  overflow: hidden; }\n  /* line 30, stdin */\n  .pokemon:before, .pokemon:after {\n    display: block;\n    position: absolute;\n    pointer-events: none;\n    transition: all 0.4s ease; }\n  /* line 36, stdin */\n  .pokemon:before {\n    content: ' ';\n    background-color: green;\n    opacity: 0;\n    z-index: 3;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%; }\n  /* line 46, stdin */\n  .pokemon:after {\n    content: \"\\f041\";\n    font: normal normal normal 14px/1 FontAwesome;\n    font-size: inherit;\n    text-rendering: auto;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    color: #FFF;\n    z-index: 4;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 8vw;\n    height: 8vw;\n    font-size: 8vw;\n    margin: -4vw 0 0 -4vw;\n    text-align: center;\n    transform: translateY(-20vw); }\n  /* line 66, stdin */\n  .pokemon.tracking:before {\n    opacity: 0.5; }\n  /* line 69, stdin */\n  .pokemon.tracking:after {\n    transform: translateY(0vw); }\n"] = false
+    __vueify_insert__.cache["/* line 3, stdin */\n.pokemon {\n  overflow: hidden; }\n  /* line 5, stdin */\n  .pokemon:before, .pokemon:after {\n    display: block;\n    position: absolute;\n    pointer-events: none;\n    transition: all 0.4s ease; }\n  /* line 11, stdin */\n  .pokemon:before {\n    content: ' ';\n    background-color: green;\n    opacity: 0;\n    z-index: 3;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%; }\n  /* line 21, stdin */\n  .pokemon:after {\n    content: \"\\f041\";\n    font: normal normal normal 14px/1 FontAwesome;\n    font-size: inherit;\n    text-rendering: auto;\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n    color: #FFF;\n    z-index: 4;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 8vw;\n    height: 8vw;\n    font-size: 8vw;\n    margin: -4vw 0 0 -4vw;\n    text-align: center;\n    transform: translateY(-20vw); }\n  /* line 41, stdin */\n  .pokemon.tracking:before {\n    opacity: 0.5; }\n  /* line 44, stdin */\n  .pokemon.tracking:after {\n    transform: translateY(0vw); }\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -27997,7 +28091,7 @@ if (module.hot) {(function () {  module.hot.accept()
     hotAPI.update("_v-7da27b71", module.exports, (typeof module.exports === "function" ? module.exports.options : module.exports).template)
   }
 })()}
-},{"../components/Pokemon.vue":64,"../components/PokemonGrid.vue":65,"superagent":45,"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],72:[function(require,module,exports){
+},{"../components/Pokemon.vue":65,"../components/PokemonGrid.vue":66,"superagent":45,"vue":57,"vue-hot-reload-api":53,"vueify/lib/insert-css":58}],74:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28014,14 +28108,19 @@ var _pokemon = require('./pokemon.js');
 
 var _pokemon2 = _interopRequireDefault(_pokemon);
 
+var _notifications = require('./notifications.js');
+
+var _notifications2 = _interopRequireDefault(_notifications);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({
   pokemon: _pokemon2.default,
-  menu: _menu2.default
+  menu: _menu2.default,
+  notifications: _notifications2.default
 });
 
-},{"./menu.js":73,"./pokemon.js":74,"redux":43}],73:[function(require,module,exports){
+},{"./menu.js":75,"./notifications.js":76,"./pokemon.js":77,"redux":43}],75:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28048,8 +28147,8 @@ function menu() {
   }
 };
 
-},{}],74:[function(require,module,exports){
-'use strict';
+},{}],76:[function(require,module,exports){
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -28057,6 +28156,70 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
+exports.default = menu;
+
+var _cordova = require("../cordova.js");
+
+var _cordova2 = _interopRequireDefault(_cordova);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var localStorage = window.localStorage.getItem("pokesniffer") ? JSON.parse(window.localStorage.getItem("pokesniffer")) : null;
+var initialState = { queuedNotifications: [], alreadyDelivered: localStorage && localStorage.notifications ? JSON.parse(localStorage).notifications.alreadyDelivered : [] };
+
+function menu() {
+  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+  var action = arguments[1];
+
+  var _ret = function () {
+    switch (action.type) {
+      case 'update-all-pokemons':
+        var notifications = [];
+        action.data.forEach(function (pokemon) {
+          if (state.alreadyDelivered.map(function (notification) {
+            return notification.data.id.toString();
+          }).indexOf(pokemon.id.toString()) === -1) {
+            var text = "A " + pokemonName(pokemon.identifier) + " was found " + Math.ceil(location.calculateDistance(JSON.parse(window.localStorage.getItem("lastKnownLocation")), pokemon.position) * 1000) + " meters away from you. It despawns in " + moment(moment.unix(pokemon.expiration_time).diff(moment(new Date()))).format('mm[m] ss[s]');
+            var random = Math.round(Math.random() * 10000);
+            notifications.push({
+              id: random,
+              icon: 'res://pokemon' + pokemon.pokemonId,
+              data: pokemon,
+              text: text
+            });
+          }
+        });
+        console.log(notifications);
+        _cordova2.default.sendNotifications(notifications);
+        return {
+          v: Object.assign({}, state, {
+            alreadyDelivered: [].concat(_toConsumableArray(state.alreadyDelivered), notifications)
+          })
+        };
+      case 'add-delivered-notification':
+        return {
+          v: Object.assign({}, state, {
+            alreadyDelivered: [].concat(_toConsumableArray(alreadyDelivered), [action.data])
+          })
+        };
+      default:
+        return {
+          v: state
+        };
+    }
+  }();
+
+  if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+};
+
+},{"../cordova.js":68}],77:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 exports.default = pokemons;
 
 var _reduxStorage = require('redux-storage');
@@ -28082,8 +28245,10 @@ var pokemonName = function pokemonName(name) {
   return tempString.charAt(0).toUpperCase() + tempString.slice(1);
 };
 
-var currentlyTrackingLocalStorage = window.localStorage.getItem("pokesniffer");
-var initialState = { pokemons: [], currentlyTracking: currentlyTrackingLocalStorage ? JSON.parse(currentlyTrackingLocalStorage).pokemon.currentlyTracking : [], alreadyTracked: [], loaded: false };
+var alreadyTracked = [];
+
+var currentlyTrackingLocalStorage = window.localStorage.getItem("pokesniffer") ? JSON.parse(window.localStorage.getItem("pokesniffer")) : null;
+var initialState = { pokemons: [], currentlyTracking: currentlyTrackingLocalStorage && currentlyTrackingLocalStorage.pokemon ? JSON.parse(currentlyTrackingLocalStorage).pokemon.currentlyTracking : [], alreadyTracked: [], loaded: false };
 
 function pokemons() {
   var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
@@ -28095,18 +28260,6 @@ function pokemons() {
         loaded: true
       });
     case 'update-all-pokemons':
-      action.data.forEach(function (pokemon) {
-        console.log(state.currentlyTracking, _typeof(pokemon.pokemonId));
-        if (state.currentlyTracking.indexOf(pokemon.pokemonId.toString()) !== -1 && state.alreadyTracked.indexOf(pokemon.id.toString()) === -1) {
-          Object.assign({}, state, {
-            alreadyTracked: [].concat(_toConsumableArray(state.alreadyTracked), [pokemon.id.toString()])
-          });
-          var text = "A " + pokemonName(pokemon.identifier) + " was found " + Math.ceil(_location2.default.calculateDistance(JSON.parse(window.localStorage.getItem("lastKnownLocation")), pokemon.position) * 1000) + " meters away from you. It despawns in " + (0, _moment2.default)(_moment2.default.unix(pokemon.expiration_time).diff((0, _moment2.default)(new Date()))).format('mm[m] ss[s]');
-          _cordova2.default.sendNotification({
-            text: text
-          });
-        }
-      });
       return Object.assign({}, state, {
         pokemons: action.data
       });
@@ -28143,7 +28296,7 @@ function pokemons() {
   }
 }
 
-},{"../cordova.js":67,"../utils/location.js":75,"moment":19,"redux-storage":36}],75:[function(require,module,exports){
+},{"../cordova.js":68,"../utils/location.js":78,"moment":19,"redux-storage":36}],78:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28192,7 +28345,7 @@ var location = function () {
 
 exports.default = location;
 
-},{}]},{},[60,63,64,65,66,69,70,71,68])
+},{}]},{},[60,64,65,66,67,70,71,72,73,69])
 
 
 //# sourceMappingURL=main.js.map

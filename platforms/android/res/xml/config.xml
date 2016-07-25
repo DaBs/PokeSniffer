@@ -23,7 +23,7 @@
     <author email="dab@davidbjerremose.com" href="http://davidbjerremose.com">
         David Bjerremose
     </author>
-    <icon src="www/images/logo/favicon.png" />
+    <icon src="www/images/icon.png" />
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />

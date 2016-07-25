@@ -9,8 +9,10 @@ const pokemonName = (name) => {
   return tempString.charAt(0).toUpperCase() + tempString.slice(1);
 }
 
-const currentlyTrackingLocalStorage = window.localStorage.getItem("pokesniffer");
-const initialState = { pokemons: [], currentlyTracking: currentlyTrackingLocalStorage ? JSON.parse(currentlyTrackingLocalStorage).pokemon.currentlyTracking : [], alreadyTracked: [], loaded: false};
+const alreadyTracked = [];
+
+const currentlyTrackingLocalStorage = window.localStorage.getItem("pokesniffer") ? JSON.parse(window.localStorage.getItem("pokesniffer")) : null;
+const initialState = { pokemons: [], currentlyTracking: currentlyTrackingLocalStorage && currentlyTrackingLocalStorage.pokemon ? JSON.parse(currentlyTrackingLocalStorage).pokemon.currentlyTracking : [], alreadyTracked: [], loaded: false};
 
 export default function pokemons(state = initialState, action) {
   switch(action.type) {
@@ -19,18 +21,6 @@ export default function pokemons(state = initialState, action) {
         loaded: true
       });
     case 'update-all-pokemons':
-      action.data.forEach(pokemon => {
-        console.log(state.currentlyTracking, typeof pokemon.pokemonId);
-        if (state.currentlyTracking.indexOf(pokemon.pokemonId.toString()) !== -1 && state.alreadyTracked.indexOf(pokemon.id.toString()) === -1) {
-          Object.assign({}, state, {
-            alreadyTracked: [ ...state.alreadyTracked, pokemon.id.toString()]
-          });
-          const text = "A " + pokemonName(pokemon.identifier) + " was found " + Math.ceil(location.calculateDistance(JSON.parse(window.localStorage.getItem("lastKnownLocation")), pokemon.position)*1000) + " meters away from you. It despawns in " + moment(moment.unix(pokemon.expiration_time).diff(moment(new Date()))).format('mm[m] ss[s]');
-          CordovaApp.sendNotification({
-            text
-          });
-        }
-      });
       return Object.assign({}, state, {
         pokemons: action.data
       });

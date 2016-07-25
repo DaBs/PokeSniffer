@@ -4,6 +4,7 @@
   <nav v-bind:class="{'is-open': toggled}">
     <a class="toggle" v-on:click="toggleMenu"><i class="fa" v-bind:class="{'fa-bars': !toggled, 'fa-times': toggled}"></i></a>
     <a v-link="{name: 'scanner'}"><i class="fa fa-globe"></i>Scanner</a>
+    <a v-link="{name: 'map'}"><i class="fa fa-map"></i>Map</a>
     <a v-link="{name: 'wishlist'}"><i class="fa fa-list"></i>Wishlist</a>
     <a v-link="{name: 'settings'}"><i class="fa fa-cogs"></i>Settings</a>
   </nav>

@@ -42,6 +42,7 @@
     "redux-storage": "^4.0.1",
     "redux-storage-engine-localstorage": "^1.1.1",
     "request": "^2.74.0",
+    "shortid": "^2.2.6",
     "superagent": "^1.8.1",
     "swiper": "^3.3.1",
     "through": "^2.3.8",

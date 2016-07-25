@@ -17,15 +17,17 @@ class CordovaApp {
     const locationString = JSON.stringify(newLoc);
     console.log(locationString);
     window.localStorage.setItem("lastKnownLocation", locationString);
-    this.backgroundScan("data");
+    backgroundScan("data");
   }
   onGeolocationFail(error){
     console.log(error);
   }
   onPause() {
+    console.log('paused app');
     window.backgroundGeolocation.start();
   }
   onResume(){
+    console.log('resumed app');
     window.backgroundGeolocation.stop();
     console.log(window.localStorage.getItem("lastKnownLocation"));
   }
@@ -48,11 +50,11 @@ class CordovaApp {
     return new Promise((resolve, reject) => {
       const location = JSON.parse(window.localStorage.getItem("lastKnownLocation"));
       request.get(this.config.visionQueryUrl + "/" + type +"/" + location.latitude +"/" + location.longitude).end((err, res) => {
-        console.log(err, res);
+        //console.log(err, res);
         if (err || !res.body.pokemon) return reject(err);
-        console.log(res);
+        //console.log(res);
         const tempPokemons = res.body.pokemon.map((pokemon) => {
-          console.log(pokemon);
+          //console.log(pokemon);
           pokemon.identifier = this.pokedata[pokemon.pokemonId].identifier;
           pokemon.position = {"latitude": pokemon.latitude, "longitude": pokemon.longitude};
           pokemon.distance = Math.ceil(this.calculateDistance(location, {"latitude": pokemon.latitude, "longitude": pokemon.longitude})*1000);
@@ -63,12 +65,10 @@ class CordovaApp {
       });
     });
   }
-  static sendNotification(data){
-    cordova.plugins.notification.local.schedule({
-      id: data.id,
-      text: data.text
-    });
+  static sendNotifications(data){
+    cordova.plugins.notification.local.schedule(data);
   }
+
   init(callback){
 
     this.app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;

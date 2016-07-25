@@ -9,6 +9,7 @@ import request from 'superagent';
 import ScanPage from './pages/ScanPage.vue';
 import WishlistPage from './pages/WishlistPage.vue';
 import SettingsPage from './pages/SettingsPage.vue';
+import MapPage from './pages/MapPage.vue';
 
 
 
@@ -38,6 +39,10 @@ router.map({
     name: 'settings',
     component: SettingsPage
   },
+  '/map': {
+    name: 'map',
+    component: MapPage
+  },
   '*': {
     component: ScanPage
   }
@@ -57,7 +62,7 @@ const cordovaConfig = {
 
 const updatePokemons = (pokemons) => {
 
-  console.log(pokemons);
+  //console.log(pokemons);
   if (pokemons) {
     router.app.actions.updateAllPokemons(pokemons);
   }
@@ -74,9 +79,9 @@ curApp.init(function(){
   setInterval(function() {
     window.navigator.geolocation.getCurrentPosition(curApp.onGeolocationSuccess, curApp.onGeolocationFail, {maximumAge: 0, timeout: 5000, enableHighAccuracy: true});
   }, 10000);
-  curApp.backgroundScan("data").then(pokemons => {
+  /*curApp.backgroundScan("data").then(pokemons => {
     updatePokemons(pokemons);
-  });
+  });*/
   setInterval(function() {
     curApp.backgroundScan("data").then(pokemons => {
       updatePokemons(pokemons);

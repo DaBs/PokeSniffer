@@ -2307,3 +2307,22 @@ img {
 
 .item-move {
   transition: transform 0.5s cubic-bezier(0.55, 0, 0.1, 1); }
+
+.info h3 {
+  font-family: 'Helvetica';
+  font-weight: bold;
+  text-align: center;
+  color: #FFF; }
+
+.info p {
+  color: #FFF;
+  text-align: center;
+  font-size: 3vw; }
+
+.info input {
+  border: none;
+  border-radius: 3vw;
+  padding: 3vw;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 5vw; }

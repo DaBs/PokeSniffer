@@ -1,6 +1,5 @@
 @import './font.scss';
 
-
 html, body {
   margin: 0;
   padding: 0vw;
@@ -128,4 +127,28 @@ img {
 
 .item-move {
   transition: transform .5s cubic-bezier(.55,0,.1,1);
+}
+
+.info {
+  h3 {
+    font-family: 'Helvetica';
+    font-weight: bold;
+    text-align: center;
+    color: #FFF;
+  }
+
+  p {
+    color: #FFF;
+    text-align: center;
+    font-size: 3vw;
+  }
+
+  input {
+    border: none;
+    border-radius: 3vw;
+    padding: 3vw;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 5vw;
+  }
 }

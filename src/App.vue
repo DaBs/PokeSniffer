@@ -31,8 +31,9 @@ import createEngine from 'redux-storage-engine-localstorage';
 
 import * as PokemonActions from './actions/PokemonActions';
 import * as MenuActions from './actions/MenuActions';
+import * as NotificationsActions from './actions/NotificationsActions';
 import reduxMixinsCreator from 'vue-redux';
-const allMixins = reduxMixinsCreator(Object.assign({}, PokemonActions, MenuActions));
+const allMixins = reduxMixinsCreator(Object.assign({}, PokemonActions, MenuActions, NotificationsActions));
 
 import PokemonList from './components/PokemonList.vue';
 import Menu from './components/Menu.vue';
