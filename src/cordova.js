@@ -17,7 +17,7 @@ class CordovaApp {
     const locationString = JSON.stringify(newLoc);
     console.log(locationString);
     window.localStorage.setItem("lastKnownLocation", locationString);
-    backgroundScan("data");
+    this.backgroundScan("data");
   }
   onGeolocationFail(error){
     console.log(error);
@@ -46,7 +46,10 @@ class CordovaApp {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c;
   }
-  backgroundScan(type){
+  static backgroundScan(type) {
+
+  }
+  scan(type){
     return new Promise((resolve, reject) => {
       const location = JSON.parse(window.localStorage.getItem("lastKnownLocation"));
       request.get(this.config.visionQueryUrl + "/" + type +"/" + location.latitude +"/" + location.longitude).end((err, res) => {

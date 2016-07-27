@@ -4,15 +4,10 @@ import CordovaApp from '../cordova.js';
 import location from '../utils/location.js';
 import moment from 'moment';
 
-const pokemonName = (name) => {
-  const tempString = name.split('-')[0];
-  return tempString.charAt(0).toUpperCase() + tempString.slice(1);
-}
-
 const alreadyTracked = [];
 
 const currentlyTrackingLocalStorage = window.localStorage.getItem("pokesniffer") ? JSON.parse(window.localStorage.getItem("pokesniffer")) : null;
-const initialState = { pokemons: [], currentlyTracking: currentlyTrackingLocalStorage && currentlyTrackingLocalStorage.pokemon ? JSON.parse(currentlyTrackingLocalStorage).pokemon.currentlyTracking : [], alreadyTracked: [], loaded: false};
+const initialState = { pokemons: [], currentlyTracking: currentlyTrackingLocalStorage && currentlyTrackingLocalStorage.pokemon ? currentlyTrackingLocalStorage.pokemon.currentlyTracking : [], alreadyTracked: [], loaded: false};
 
 export default function pokemons(state = initialState, action) {
   switch(action.type) {

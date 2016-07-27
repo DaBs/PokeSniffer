@@ -28,9 +28,10 @@ export function updatePokemon(data) {
   }
 }
 */
-export function updateAllPokemons(data) {
+export function updateAllPokemons(data, currentlyTracking) {
   return {
     type: 'update-all-pokemons',
-    data
+    data,
+    currentlyTracking
   }
 }

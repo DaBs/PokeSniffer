@@ -64,8 +64,21 @@ const updatePokemons = (pokemons) => {
 
   //console.log(pokemons);
   if (pokemons) {
-    router.app.actions.updateAllPokemons(pokemons);
+    router.app.actions.updateAllPokemons(pokemons, router.app.state.pokemon.currentlyTracking);
   }
+}
+
+const gotoPokemonOnMap = (notification) => {
+  const data = JSON.parse(notification.data)
+  router.go({
+    name: 'map',
+    query: {
+      id: data.id,
+      lat: data.latitude,
+      lng: data.longitude,
+      zoom: 16
+    }
+  });
 }
 
 const curApp = new CordovaApp(cordovaConfig);
@@ -79,19 +92,20 @@ curApp.init(function(){
   setInterval(function() {
     window.navigator.geolocation.getCurrentPosition(curApp.onGeolocationSuccess, curApp.onGeolocationFail, {maximumAge: 0, timeout: 5000, enableHighAccuracy: true});
   }, 10000);
-  /*curApp.backgroundScan("data").then(pokemons => {
+  curApp.scan("data").then(pokemons => {
     updatePokemons(pokemons);
-  });*/
+  });
   setInterval(function() {
-    curApp.backgroundScan("data").then(pokemons => {
+    curApp.scan("data").then(pokemons => {
       updatePokemons(pokemons);
     });
   }, 30000);
   setInterval(function() {
-    curApp.backgroundScan("scan").then(pokemons => {
+    curApp.scan("scan").then(pokemons => {
       updatePokemons(pokemons);
     });
   }, 60000);
+  cordova.plugins.notification.local.on("click", gotoPokemonOnMap);
   window.backgroundGeolocation.configure(curApp.onGeolocationSuccess, curApp.onGeolocationFail, {
     desiredAccuracy: 10,
     stationaryRadius: 0,

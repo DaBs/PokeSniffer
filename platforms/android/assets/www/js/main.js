@@ -27392,10 +27392,11 @@ export function updatePokemon(data) {
   }
 }
 */
-function updateAllPokemons(data) {
+function updateAllPokemons(data, currentlyTracking) {
   return {
     type: 'update-all-pokemons',
-    data: data
+    data: data,
+    currentlyTracking: currentlyTracking
   };
 }
 
@@ -27622,7 +27623,7 @@ var CordovaApp = function () {
       var locationString = JSON.stringify(newLoc);
       console.log(locationString);
       window.localStorage.setItem("lastKnownLocation", locationString);
-      backgroundScan("data");
+      this.backgroundScan("data");
     }
   }, {
     key: 'onGeolocationFail',
@@ -27661,8 +27662,8 @@ var CordovaApp = function () {
       return R * c;
     }
   }, {
-    key: 'backgroundScan',
-    value: function backgroundScan(type) {
+    key: 'scan',
+    value: function scan(type) {
       var _this = this;
 
       return new Promise(function (resolve, reject) {
@@ -27697,6 +27698,9 @@ var CordovaApp = function () {
       }
     }
   }], [{
+    key: 'backgroundScan',
+    value: function backgroundScan(type) {}
+  }, {
     key: 'sendNotifications',
     value: function sendNotifications(data) {
       cordova.plugins.notification.local.schedule(data);
@@ -27806,8 +27810,21 @@ var updatePokemons = function updatePokemons(pokemons) {
 
   //console.log(pokemons);
   if (pokemons) {
-    router.app.actions.updateAllPokemons(pokemons);
+    router.app.actions.updateAllPokemons(pokemons, router.app.state.pokemon.currentlyTracking);
   }
+};
+
+var gotoPokemonOnMap = function gotoPokemonOnMap(notification) {
+  var data = JSON.parse(notification.data);
+  router.go({
+    name: 'map',
+    query: {
+      id: data.id,
+      lat: data.latitude,
+      lng: data.longitude,
+      zoom: 16
+    }
+  });
 };
 
 var curApp = new _cordova2.default(cordovaConfig);
@@ -27821,19 +27838,20 @@ curApp.init(function () {
   setInterval(function () {
     window.navigator.geolocation.getCurrentPosition(curApp.onGeolocationSuccess, curApp.onGeolocationFail, { maximumAge: 0, timeout: 5000, enableHighAccuracy: true });
   }, 10000);
-  /*curApp.backgroundScan("data").then(pokemons => {
+  curApp.scan("data").then(function (pokemons) {
     updatePokemons(pokemons);
-  });*/
+  });
   setInterval(function () {
-    curApp.backgroundScan("data").then(function (pokemons) {
+    curApp.scan("data").then(function (pokemons) {
       updatePokemons(pokemons);
     });
   }, 30000);
   setInterval(function () {
-    curApp.backgroundScan("scan").then(function (pokemons) {
+    curApp.scan("scan").then(function (pokemons) {
       updatePokemons(pokemons);
     });
   }, 60000);
+  cordova.plugins.notification.local.on("click", gotoPokemonOnMap);
   window.backgroundGeolocation.configure(curApp.onGeolocationSuccess, curApp.onGeolocationFail, {
     desiredAccuracy: 10,
     stationaryRadius: 0,
@@ -27844,7 +27862,7 @@ curApp.init(function () {
 
 },{"./App.vue":60,"./cordova.js":68,"./pages/MapPage.vue":70,"./pages/ScanPage.vue":71,"./pages/SettingsPage.vue":72,"./pages/WishlistPage.vue":73,"./utils/location.js":78,"superagent":45,"vue":57,"vue-animated-list":52,"vue-router":56}],70:[function(require,module,exports){
 var __vueify_insert__ = require("vueify/lib/insert-css")
-var __vueify_style__ = __vueify_insert__.insert("\n\n#map {\n  height: 100vh;\n  width: 100vw;\n  display: block;\n  position: absolute;\n  z-index: 80;\n  top: 0;\n  left: 0;\n}\n\n")
+var __vueify_style__ = __vueify_insert__.insert("/* line 3, stdin */\n#map {\n  height: 100vh;\n  width: 100vw;\n  display: block;\n  position: absolute;\n  z-index: 80;\n  top: 0;\n  left: 0; }\n")
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -27867,10 +27885,15 @@ exports.default = {
       center: { lat: 10.0, lng: 10.0 },
       zoom: 15,
       style: null,
-      pokemons: this.$parent.state.pokemon.pokemons
+      pokemons: this.$parent.state.pokemon.pokemons,
+      markers: {}
     };
   },
 
+
+  route: {
+    canReuse: false
+  },
 
   watch: {
     'pokemons': function pokemons(val, oldVal) {
@@ -27881,16 +27904,42 @@ exports.default = {
   components: {},
 
   ready: function ready() {
-    var pos = JSON.parse(window.localStorage.getItem("lastKnownLocation"));
+    var _this = this;
+
+    var localStorage = JSON.parse(window.localStorage.getItem("lastKnownLocation"));
+    console.log(this.$route.query.lat, this.$route.query.lng);
+    var centerPos = this.$route.query.lat && this.$route.query.lng ? { lat: parseFloat(this.$route.query.lat), lng: parseFloat(this.$route.query.lng) } : { lat: localStorage.latitude, lng: localStorage.longitude };
+    var youPos = { lat: localStorage.latitude, lng: localStorage.longitude };
+    var id = this.$route.query.id ? parseInt(this.$route.query.id) : null;
     _superagent2.default.get('./data/maptheme.json').end(function (err, res) {
       if (err) console.log(err);
       var mapDiv = document.getElementById('map');
       var map = new google.maps.Map(mapDiv, {
-        center: { lat: pos.latitude, lng: pos.longitude },
+        center: centerPos,
         zoom: 15,
         styles: res.body,
         disableDefaultUI: true
 
+      });
+
+      var youMarker = new google.maps.Marker({
+        position: youPos,
+        map: map
+      });
+
+      _this.pokemons.forEach(function (pokemon) {
+        console.log('pokemon for marker', pokemon.identifier);
+        if (!_this.markers[pokemon.id]) {
+          var marker = new google.maps.Marker({
+            position: { lat: pokemon.position.latitude, lng: pokemon.position.longitude },
+            map: map,
+            title: pokemon.identifier,
+            icon: './images/pokemons/' + pokemon.pokemonId + '.png'
+          });
+          if (id && id != pokemon.id) {
+            marker.setOpacity(0.2);
+          }
+        }
       });
     });
   }
@@ -27902,7 +27951,7 @@ if (module.hot) {(function () {  module.hot.accept()
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.dispose(function () {
-    __vueify_insert__.cache["\n\n#map {\n  height: 100vh;\n  width: 100vw;\n  display: block;\n  position: absolute;\n  z-index: 80;\n  top: 0;\n  left: 0;\n}\n\n"] = false
+    __vueify_insert__.cache["/* line 3, stdin */\n#map {\n  height: 100vh;\n  width: 100vw;\n  display: block;\n  position: absolute;\n  z-index: 80;\n  top: 0;\n  left: 0; }\n"] = false
     document.head.removeChild(__vueify_style__)
   })
   if (!module.hot.data) {
@@ -27985,7 +28034,7 @@ exports.default = {
   name: 'SettingsPage'
 };
 if (module.exports.__esModule) module.exports = module.exports.default
-;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n"
+;(typeof module.exports === "function"? module.exports.options: module.exports).template = "\n\n<div>\n  <h1>Yet to be implemented</h1>\n</div>\n\n\n"
 if (module.hot) {(function () {  module.hot.accept()
   var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -28148,7 +28197,7 @@ function menu() {
 };
 
 },{}],76:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -28158,16 +28207,29 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.default = menu;
 
-var _cordova = require("../cordova.js");
+var _cordova = require('../cordova.js');
 
 var _cordova2 = _interopRequireDefault(_cordova);
+
+var _location = require('../utils/location.js');
+
+var _location2 = _interopRequireDefault(_location);
+
+var _moment = require('moment');
+
+var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var localStorage = window.localStorage.getItem("pokesniffer") ? JSON.parse(window.localStorage.getItem("pokesniffer")) : null;
-var initialState = { queuedNotifications: [], alreadyDelivered: localStorage && localStorage.notifications ? JSON.parse(localStorage).notifications.alreadyDelivered : [] };
+var initialState = { queuedNotifications: [], alreadyDelivered: [] };
+
+var pokemonName = function pokemonName(name) {
+  var tempString = name.split('-')[0];
+  return tempString.charAt(0).toUpperCase() + tempString.slice(1);
+};
 
 function menu() {
   var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
@@ -28179,9 +28241,9 @@ function menu() {
         var notifications = [];
         action.data.forEach(function (pokemon) {
           if (state.alreadyDelivered.map(function (notification) {
-            return notification.data.id.toString();
-          }).indexOf(pokemon.id.toString()) === -1) {
-            var text = "A " + pokemonName(pokemon.identifier) + " was found " + Math.ceil(location.calculateDistance(JSON.parse(window.localStorage.getItem("lastKnownLocation")), pokemon.position) * 1000) + " meters away from you. It despawns in " + moment(moment.unix(pokemon.expiration_time).diff(moment(new Date()))).format('mm[m] ss[s]');
+            return JSON.parse(notification.data).id.toString();
+          }).indexOf(pokemon.id.toString()) === -1 && action.currentlyTracking.indexOf(pokemon.pokemonId.toString()) !== -1) {
+            var text = "A " + pokemonName(pokemon.identifier) + " was found " + Math.ceil(_location2.default.calculateDistance(JSON.parse(window.localStorage.getItem("lastKnownLocation")), pokemon.position) * 1000) + " meters away from you. It despawns in " + (0, _moment2.default)(_moment2.default.unix(pokemon.expiration_time).diff((0, _moment2.default)(new Date()))).format('mm[m] ss[s]');
             var random = Math.round(Math.random() * 10000);
             notifications.push({
               id: random,
@@ -28211,10 +28273,10 @@ function menu() {
     }
   }();
 
-  if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+  if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 };
 
-},{"../cordova.js":68}],77:[function(require,module,exports){
+},{"../cordova.js":68,"../utils/location.js":78,"moment":19}],77:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28240,15 +28302,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var pokemonName = function pokemonName(name) {
-  var tempString = name.split('-')[0];
-  return tempString.charAt(0).toUpperCase() + tempString.slice(1);
-};
-
 var alreadyTracked = [];
 
 var currentlyTrackingLocalStorage = window.localStorage.getItem("pokesniffer") ? JSON.parse(window.localStorage.getItem("pokesniffer")) : null;
-var initialState = { pokemons: [], currentlyTracking: currentlyTrackingLocalStorage && currentlyTrackingLocalStorage.pokemon ? JSON.parse(currentlyTrackingLocalStorage).pokemon.currentlyTracking : [], alreadyTracked: [], loaded: false };
+var initialState = { pokemons: [], currentlyTracking: currentlyTrackingLocalStorage && currentlyTrackingLocalStorage.pokemon ? currentlyTrackingLocalStorage.pokemon.currentlyTracking : [], alreadyTracked: [], loaded: false };
 
 function pokemons() {
   var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
