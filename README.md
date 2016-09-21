@@ -1,7 +1,7 @@
 # PokeSniffer
 PokeSniffer - A multiplatform app written in Cordova with Vuejs and Redux to get API data about pokemons in pokemon go.
 
-More coming soon.
+# Project discontinued as the app breaks the ToS of the Pokémon Go agreement.
 
 #Installation
 Clone repo, then run
